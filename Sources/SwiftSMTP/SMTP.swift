@@ -78,10 +78,7 @@ public struct SMTP {
         self.tlsConfiguration = tlsConfiguration
 
         let _authMethods = !authMethods.isEmpty ? authMethods : [
-            AuthMethod.cramMD5,
-            AuthMethod.login,
-            AuthMethod.plain,
-            AuthMethod.xoauth2
+            AuthMethod.none
         ]
         var authMethodsDictionary = [String: AuthMethod]()
         _authMethods.forEach { authMethod in

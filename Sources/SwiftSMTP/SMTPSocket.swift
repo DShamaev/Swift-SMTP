@@ -41,6 +41,9 @@ struct SMTPSocket {
         try socket.connect(to: hostname, port: port, timeout: timeout * 1000)
         try parseResponses(readFromSocket(), command: .connect)
         var serverOptions = try getServerOptions(domainName: domainName)
+        guard !authMethods.keys.contains(AuthMethod.none.rawValue) else {
+            return
+        }
         if tlsMode == .requireSTARTTLS || tlsMode == .normal {
             if try doStarttls(serverOptions: serverOptions, tlsConfiguration: tlsConfiguration) {
                 serverOptions = try getServerOptions(domainName: domainName)
@@ -194,6 +197,8 @@ private extension SMTPSocket {
             try loginPlain(email: email, password: password)
         case .xoauth2:
             try loginXOAuth2(email: email, accessToken: password)
+        default:
+            break
         }
     }
 
